@@ -1,6 +1,7 @@
 import products from "@/assets/data/products";
 import Button from "@/src/components/Button";
 import Colors from "@/src/constants/Colors";
+import { useCart } from "@/src/providers/CartProvider";
 import { PizzaSize } from "@/src/types";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
@@ -13,11 +14,13 @@ const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
 
 const ProductDetailsScreen = () => {
   const { id } = useLocalSearchParams();
+  const { addItem } = useCart();
   const product = products.find((p) => p.id === Number(id));
   const [selectedSize, setSelectedSize] = useState<PizzaSize>("M");
 
   const addToCart = () => {
-    console.log("Adding to cart", product?.name, selectedSize);
+    if (!product) return
+    addItem(product, selectedSize);
   };
 
   if (!product) {
@@ -35,6 +38,7 @@ const ProductDetailsScreen = () => {
       <View style={styles.sizes}>
         {sizes.map((size) => (
           <Pressable
+          key={`pizza-size-${size}`}
             onPress={() => setSelectedSize(size)}
             style={[
               styles.size,
