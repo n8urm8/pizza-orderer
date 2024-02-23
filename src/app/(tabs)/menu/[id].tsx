@@ -3,7 +3,7 @@ import Button from "@/src/components/Button";
 import Colors from "@/src/constants/Colors";
 import { useCart } from "@/src/providers/CartProvider";
 import { PizzaSize } from "@/src/types";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { View, Text, Image, StyleSheet, Pressable } from "react-native";
 
@@ -15,12 +15,14 @@ const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
 const ProductDetailsScreen = () => {
   const { id } = useLocalSearchParams();
   const { addItem } = useCart();
+  const router = useRouter();
   const product = products.find((p) => p.id === Number(id));
   const [selectedSize, setSelectedSize] = useState<PizzaSize>("M");
 
   const addToCart = () => {
-    if (!product) return
+    if (!product) return;
     addItem(product, selectedSize);
+    router.push("/cart");
   };
 
   if (!product) {
@@ -38,7 +40,7 @@ const ProductDetailsScreen = () => {
       <View style={styles.sizes}>
         {sizes.map((size) => (
           <Pressable
-          key={`pizza-size-${size}`}
+            key={`pizza-size-${size}`}
             onPress={() => setSelectedSize(size)}
             style={[
               styles.size,
