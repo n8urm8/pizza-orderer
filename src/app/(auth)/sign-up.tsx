@@ -1,12 +1,14 @@
 import Button from "@/src/components/Button";
 import Colors from "@/src/constants/Colors";
+import { supabase } from "@/src/lib/supabase";
 import { Stack, useRouter } from "expo-router";
 import React, { useState } from "react";
-import { View, TextInput, StyleSheet, Text } from "react-native";
+import { View, TextInput, StyleSheet, Text, Alert } from "react-native";
 
 const SignUpComponent = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleEmailChange = (text: string) => {
@@ -17,10 +19,19 @@ const SignUpComponent = () => {
     setPassword(text);
   };
 
-  const handleSubmit = () => {
-    // Add your sign-in logic here
-    console.log("Email:", email);
-    console.log("Password:", password);
+  const handleSubmit = async () => {
+    setLoading(true);
+    const { error } = await supabase.auth.signUp({ email, password });
+
+    if (error) {
+      Alert.alert("Error", error.message);
+    }
+    if (!error) {
+      setEmail("");
+      setPassword("");
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -43,7 +54,11 @@ const SignUpComponent = () => {
         value={password}
         onChangeText={handlePasswordChange}
       />
-      <Button text="Create account" onPress={handleSubmit} />
+      <Button
+        disabled={loading}
+        text={loading ? "Creating..." : "Create account"}
+        onPress={handleSubmit}
+      />
       <Text
         style={styles.textButton}
         onPress={() => router.push("/(auth)/sign-in")}

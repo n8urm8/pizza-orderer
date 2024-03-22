@@ -7,7 +7,7 @@ import { Stack } from "expo-router";
 export default function TabTwoScreen() {
   return (
     <>
-      <Stack.Screen options={{ title: "Orders" }} />
+      <Stack.Screen options={{ title: "Active" }} />
       <FlatList
         style={styles.orderList}
         data={orders}
