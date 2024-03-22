@@ -20,6 +20,7 @@ const OrderListItem: React.FC<OrderListItemProps> = ({
   const segments = useSegments();
 
   return (
+    // @ts-expect-error href type is funky
     <Link href={`/${segments[0]}/orders/${id}`}>
       <View style={styles.container}>
         <View>
