@@ -1,10 +1,19 @@
-import { FlatList, StyleSheet } from "react-native";
+import { ActivityIndicator, FlatList, StyleSheet, Text } from "react-native";
 
-import orders from "@/assets/data/orders";
 import OrderListItem from "@/src/components/OrderListItem";
 import { Stack } from "expo-router";
+import { useAdminOrderList } from "@/src/api/orders";
 
-export default function TabTwoScreen() {
+export default function OrdersScreen() {
+  const { data: orders, isLoading, error } = useAdminOrderList({});
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
+
+  if (error) {
+    return <Text>Failed to fetch products.</Text>;
+  }
+
   return (
     <>
       <Stack.Screen options={{ title: "Active" }} />
