@@ -18,7 +18,7 @@ export default function TabIndex() {
       <Link href={"/(user)"} asChild>
         <Button text="User" />
       </Link>
-      <Link href={"/(admin)"} asChild>
+      <Link href={"/(admin)/menu"} asChild>
         <Button text="Admin" />
       </Link>
 

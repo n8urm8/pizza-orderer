@@ -1,10 +1,20 @@
-import { StyleSheet, View, FlatList, Image } from "react-native";
+import { StyleSheet, Text, FlatList, ActivityIndicator } from "react-native";
 
 import Colors from "@/src/constants/Colors";
 import products from "@/assets/data/products";
 import { ProductListItem } from "@/src/components/ProductListItem";
+import { useProducts } from "@/src/api/products";
 
 export default function TabOneScreen() {
+  const { data: products, isLoading, error } = useProducts();
+
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
+
+  if (error) {
+    return <Text>Failed to fetch products.</Text>;
+  }
   return (
     <FlatList
       style={styles.productList}
